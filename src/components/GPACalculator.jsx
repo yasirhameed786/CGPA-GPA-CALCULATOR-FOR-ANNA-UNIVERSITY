@@ -133,7 +133,13 @@ export default function GPACalculator() {
                                             className="w-full bg-slate-800 rounded-lg px-3 py-2 text-white outline-none focus:ring-2 focus:ring-purple-500/50 uppercase placeholder:normal-case"
                                         />
                                         {sub.code && !findSubject(sub.code) && (
-                                            <span className="absolute right-2 top-2.5 w-2 h-2 rounded-full bg-yellow-500/50" title="Code not found in local DB" />
+                                            <button
+                                                onClick={() => window.open(`https://www.google.com/search?q=Anna+University+Regulation+2021+credit+point+for+${sub.code}`, '_blank')}
+                                                className="absolute right-2 top-2 p-1 text-yellow-500 hover:text-yellow-400 hover:bg-yellow-500/10 rounded transition-colors"
+                                                title="Unknown Subject: Click to search credits online"
+                                            >
+                                                <Search className="w-4 h-4" />
+                                            </button>
                                         )}
                                         {sub.code && findSubject(sub.code) && (
                                             <span className="absolute right-2 top-2.5 w-2 h-2 rounded-full bg-green-500/50" title="Found!" />
@@ -142,29 +148,44 @@ export default function GPACalculator() {
                                 </div>
 
                                 <div className="col-span-12 sm:col-span-5">
-                                    <label className="text-xs text-slate-500 mb-1 block sm:hidden">Subject Name</label>
-                                    <input
-                                        type="text"
-                                        value={sub.name}
-                                        onChange={(e) => updateSubject(sub.id, 'name', e.target.value)}
-                                        placeholder="Subject Name"
-                                        className="w-full bg-transparent border-b border-slate-700 focus:border-purple-500 outline-none text-white px-2 py-1 transition-colors"
-                                    />
+                                    {findSubject(sub.code) ? (
+                                        <div className="flex flex-col justify-center h-full">
+                                            <p className="text-sm font-medium text-white truncate">{findSubject(sub.code).name}</p>
+                                            <p className="text-xs text-green-400">{findSubject(sub.code).credit} Credits</p>
+                                        </div>
+                                    ) : (
+                                        <>
+                                            <label className="text-xs text-slate-500 mb-1 block sm:hidden">Subject Name</label>
+                                            <input
+                                                type="text"
+                                                value={sub.name}
+                                                onChange={(e) => updateSubject(sub.id, 'name', e.target.value)}
+                                                placeholder="Subject Name"
+                                                className="w-full bg-transparent border-b border-slate-700 focus:border-purple-500 outline-none text-white px-2 py-1 transition-colors"
+                                            />
+                                        </>
+                                    )}
                                 </div>
 
                                 <div className="col-span-6 sm:col-span-2">
                                     <label className="text-xs text-slate-500 mb-1 block sm:hidden">Credits</label>
-                                    <div className="relative">
-                                        <input
-                                            type="number"
-                                            min="1"
-                                            max="10"
-                                            value={sub.credit}
-                                            onChange={(e) => updateSubject(sub.id, 'credit', e.target.value)}
-                                            className="w-full bg-slate-800 rounded-lg px-3 py-2 text-white outline-none focus:ring-2 focus:ring-purple-500/50"
-                                        />
-                                        <span className="absolute right-3 top-2 text-xs text-slate-500 pointer-events-none">Cr</span>
-                                    </div>
+                                    {findSubject(sub.code) ? (
+                                        <div className="w-full bg-slate-800/50 rounded-lg px-3 py-2 text-slate-400 border border-slate-700 cursor-not-allowed">
+                                            {sub.credit} <span className="text-xs">Cr</span>
+                                        </div>
+                                    ) : (
+                                        <div className="relative">
+                                            <input
+                                                type="number"
+                                                min="1"
+                                                max="10"
+                                                value={sub.credit}
+                                                onChange={(e) => updateSubject(sub.id, 'credit', e.target.value)}
+                                                className="w-full bg-slate-800 rounded-lg px-3 py-2 text-white outline-none focus:ring-2 focus:ring-purple-500/50"
+                                            />
+                                            <span className="absolute right-3 top-2 text-xs text-slate-500 pointer-events-none">Cr</span>
+                                        </div>
+                                    )}
                                 </div>
 
                                 <div className="col-span-5 sm:col-span-2">
